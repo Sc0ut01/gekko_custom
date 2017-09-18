@@ -10,14 +10,16 @@ var method = {};
 // prepare everything our method needs
 method.init = function() {
 
-  this.name = 'Scalping';
+  this.name = 'MACD DEMA RSI CCI';
   this.currentTrend;
   this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
-  var parameters = {short: 13, long: 21, signal: 1};
+  var parameters = {short: 10, long: 21, signal: 9, down: -0.025, up: 0.025, persistence: 1};
   this.addIndicator('macd1', 'MACD', parameters);
+  
   var parameters = {short: 21, long: 34, signal: 1};
   this.addIndicator('macd2', 'MACD', parameters);
+  
   var parameters = {short: 34, long: 144, signal: 1};
   this.addIndicator('macd3', 'MACD', parameters);
   this.addIndicator('ema21', 'EMA', 21);
