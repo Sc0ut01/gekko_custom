@@ -73,7 +73,7 @@ method.log = function() {
 
 method.check = function() {
   var macd1_diff = this.indicators.macd1.result; 
-  if(macd1_diff > macd1_up) {
+  if(macd1_diff > global.macd1_up) {
     if(this.trend.direction !== 'up')
       this.trend = {
         duration: 0,
@@ -81,10 +81,37 @@ method.check = function() {
         direction: 'up',
         adviced: false
       };
+  this.trend.duration++;
+  log.debug('In uptrend since', this.trend.duration, 'candle(s)');
+    if(this.trend.duration >= global.macd1_persistence)
+      this.trend.persisted = true;
+    if(this.trend.persisted && !this.trend.adviced) {
+      this.trend.adviced = true;
+      this.advice('long');
+      } else
+      this.advice(); 
+ 
+  }else if(macd1_diff < global.macd1_down) {
+    if(this.trend.direction !== 'down')
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'down',
+        adviced: false
+      };
+    this.trend.duration++;
+    log.debug('In downtrend since', this.trend.duration, 'candle(s)');
+    if(this.trend.duration >= global.macd1_persistence)
+      this.trend.persisted = true;
+    if(this.trend.persisted && !this.trend.adviced) {
+      this.trend.adviced = true;
+      this.advice('short');
+    } else
+      this.advice();
 
-  
-  
+  } else {
 
+    log.debug('In no trend');
   
   
   
