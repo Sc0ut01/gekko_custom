@@ -69,6 +69,9 @@ method.update = function(candle) {
 
 // for debugging purposes: log the last calculated
 method.log = function() {
+
+  var macd1_log = this.indicators.macd1;
+
 }
 
 method.check = function() {
