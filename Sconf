@@ -169,7 +169,7 @@ config.StochRSI = {
 
 // custom settings:
 config.custom = {
-  my_custom_setting: 10,
+  //my_custom_setting: 10,
 }
 
 config['talib-macd'] = {
