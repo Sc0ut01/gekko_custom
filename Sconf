@@ -37,7 +37,7 @@ config.tradingAdvisor = {
   historySize: 3,
   adapter: 'sqlite',
   talib: {
-    enabled: false,
+    enabled: true,
     version: '1.0.2'
   }
 }
