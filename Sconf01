@@ -24,8 +24,8 @@ config.paperTrader = {
   enabled: true,
   reportInCurrency: true,
   simulationBalance: {
-    asset: 1,
-    currency: 100,
+    asset: 0,
+    currency: 147,
   },
   verbose: false,
   feeMaker: 0.15,
@@ -37,7 +37,7 @@ config.paperTrader = {
 
 config.tradingAdvisor = {
   enabled: true,
-  method: 'LosNardosv3',
+  method: 'custom',
   candleSize: 1,
   historySize: 3,
   adapter: 'sqlite',
@@ -72,7 +72,7 @@ config.sqlite = {
 }
 
 config.backtest = {
-    daterange: {from: '2017-07-01', to: '2017-08-01'},
+    daterange: {from: '2017-06-20', to: '2017-09-18'},
     batchSize: 50
 }
 
