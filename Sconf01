@@ -1,4 +1,4 @@
-ar config = {};
+var config = {};
 
 config.debug = true; // for additional logging / debugging
 
