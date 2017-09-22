@@ -1,6 +1,7 @@
 // helpers
 var _ = require('lodash');
 var log = require('../core/log.js');
+var globals = require('globals');
 
 //values
   //macd1
