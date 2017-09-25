@@ -41,6 +41,13 @@ method.init = function() {
   
   this.name = 'MACD_DEMA_RSI_CCI';
   this.currentTrend;
+  this.trend = {
+    direction: 'none',
+    duration: 0,
+    persisted: false,
+    adviced: false
+  };
+
   this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
   var macd1_parameters = {short: global.macd1_short, long: global.macd1_long, signal: global.macd1_signal, down: global.macd1_down, up: global.macd1_up, persistence: global.macd1_persistence};
@@ -71,7 +78,20 @@ method.update = function(candle) {
 // for debugging purposes: log the last calculated
 method.log = function() {
 
-  //var macd1_log = this.indicators.macd1;
+  
+  var digits = 8;
+  var macd = this.indicators.macd;
+
+  var diff = macd.diff;
+  var signal = macd.signal.result;
+
+  log.debug('calculated MACD properties for candle:');
+  log.debug('\t', 'short:', macd.short.result.toFixed(digits));
+  log.debug('\t', 'long:', macd.long.result.toFixed(digits));
+  log.debug('\t', 'macd:', diff.toFixed(digits));
+  log.debug('\t', 'signal:', signal.toFixed(digits));
+  log.debug('\t', 'macdiff:', macd.result.toFixed(digits));
+
 
 }
 
