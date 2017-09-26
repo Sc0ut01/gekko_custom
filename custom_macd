@@ -33,6 +33,8 @@ method.init = function() {
 
   // define the indicators we need
   this.addIndicator('macd', 'MACD', this.settings);
+  this.addIndicator('rsi', 'RSI', this.settings);
+
 }
 
 // what happens on every new candle?
@@ -45,6 +47,8 @@ method.update = function(candle) {
 method.log = function() {
   var digits = 8;
   var macd = this.indicators.macd;
+  var rsi = this.indicators.rsi;
+
 
   var diff = macd.diff;
   var signal = macd.signal.result;
@@ -55,6 +59,11 @@ method.log = function() {
   log.debug('\t', 'macd:', diff.toFixed(digits));
   log.debug('\t', 'signal:', signal.toFixed(digits));
   log.debug('\t', 'macdiff:', macd.result.toFixed(digits));
+  
+  log.debug('calculated RSI properties for candle:');
+  log.debug('\t', 'rsi:', rsi.rsi.toFixed(digits));
+  log.debug('\t', 'price:', candle.close.toFixed(digits));
+
 }
 
 method.check = function() {
@@ -114,22 +123,70 @@ method.check = function() {
 
     log.debug('In no trend');
 
-    // we're not in an up nor in a downtrend
-    // but for now we ignore sideways trends
-    //
-    // read more @link:
-    //
-    // https://github.com/askmike/gekko/issues/171
+    this.advice();
+  }
+}
 
-    // this.trend = {
-    //   direction: 'none',
-    //   duration: 0,
-    //   persisted: false,
-    //   adviced: false
-    // };
+
+method.check = function() {
+  var rsi = this.indicators.rsi;
+  var rsiVal = rsi.rsi;
+
+  if(rsiVal > this.settings.thresholds.high) {
+
+    // new trend detected
+    if(this.trend.direction !== 'high')
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'high',
+        adviced: false
+      };
+
+    this.trend.duration++;
+
+    log.debug('In high since', this.trend.duration, 'candle(s)');
+
+    if(this.trend.duration >= this.settings.thresholds.persistence)
+      this.trend.persisted = true;
+
+    if(this.trend.persisted && !this.trend.adviced) {
+      this.trend.adviced = true;
+      this.advice('short');
+    } else
+      this.advice();
+
+  } else if(rsiVal < this.settings.thresholds.low) {
+
+    // new trend detected
+    if(this.trend.direction !== 'low')
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'low',
+        adviced: false
+      };
+
+    this.trend.duration++;
+
+    log.debug('In low since', this.trend.duration, 'candle(s)');
+
+    if(this.trend.duration >= this.settings.thresholds.persistence)
+      this.trend.persisted = true;
+
+    if(this.trend.persisted && !this.trend.adviced) {
+      this.trend.adviced = true;
+      this.advice('long');
+    } else
+      this.advice();
+
+  } else {
+
+    log.debug('In no trend');
 
     this.advice();
   }
 }
+
 
 module.exports = method;
