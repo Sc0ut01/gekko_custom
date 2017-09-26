@@ -5,12 +5,12 @@ var log = require('../core/log.js');
 
 //values
   //macd1
-//global.macd1_short = 10;
-//global.macd1_long = 21;
-//global.macd1_signal = 9;
-//global.macd1_down = -0.025;
-//global.macd1_up = 0.025;
-//global.macd1_persistence = 1;
+//var macd1_short = 10;
+//var macd1_long = 21;
+//var macd1_signal = 9;
+//var macd1_down = -0.025;
+//var macd1_up = 0.025;
+//var macd1_persistence = 1;
 
   //dema1
 //global.dema1_short = 10;
@@ -51,7 +51,7 @@ method.init = function() {
   this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
   //var macd1_parameters = {short: global.macd1_short, long: global.macd1_long, signal: global.macd1_signal, down: global.macd1_down, up: global.macd1_up, persistence: global.macd1_persistence};
-  this.addIndicator('macd1', 'MACD', this.settings);
+  this.addIndicator('macd1', 'MACD', this.settings, );
   
   //var dema1_parameters = {short: global.dema1_short, long: global.dema1_short, down: global.dema1_down, up: global.dema1_up};
   //this.addIndicator('dema1', 'DEMA', dema1_parameters);
@@ -96,8 +96,12 @@ method.log = function() {
 }
 
 method.check = function() {
+  var macd1_down = -0.025;
+  var macd1_up = 0.025;
+  var macd1_persistence = 1;
+  
   var macd1_diff = this.indicators.macd1.result; 
-  if(macd1_diff > this.settings.tresholds.up) {
+  if(macd1_diff > macd1_up) {
     if(this.trend.direction !== 'up')
       this.trend = {
         duration: 0,
@@ -107,7 +111,7 @@ method.check = function() {
       };
   this.trend.duration++;
   log.debug('In uptrend since', this.trend.duration, 'candle(s)');
-    if(this.trend.duration >= this.settings.thresholds.persistence)
+    if(this.trend.duration >= macd1_persistence)
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
@@ -115,7 +119,7 @@ method.check = function() {
       } else
       this.advice(); 
  
-  }else if(macd1_diff < this.settings.thresholds.down) {
+  }else if(macd1_diff < macd1_down) {
     if(this.trend.direction !== 'down')
       this.trend = {
         duration: 0,
@@ -125,7 +129,7 @@ method.check = function() {
       };
     this.trend.duration++;
     log.debug('In downtrend since', this.trend.duration, 'candle(s)');
-    if(this.trend.duration >= this.settings.thresholds.persistence)
+    if(this.trend.duration >= acd1_persistence)
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
