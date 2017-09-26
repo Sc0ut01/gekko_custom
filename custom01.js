@@ -80,17 +80,17 @@ method.log = function() {
 
   
   var digits = 8;
-  var macd = this.indicators.macd;
+  var macd = this.indicators.macd1;
 
-  var diff = macd.diff;
-  var signal = macd.signal.result;
+  var diff = macd1.diff;
+  var signal = macd1.signal.result;
 
   log.debug('calculated MACD properties for candle:');
-  log.debug('\t', 'short:', macd.short.result.toFixed(digits));
-  log.debug('\t', 'long:', macd.long.result.toFixed(digits));
+  log.debug('\t', 'short:', macd1.short.result.toFixed(digits));
+  log.debug('\t', 'long:', macd1.long.result.toFixed(digits));
   log.debug('\t', 'macd:', diff.toFixed(digits));
   log.debug('\t', 'signal:', signal.toFixed(digits));
-  log.debug('\t', 'macdiff:', macd.result.toFixed(digits));
+  log.debug('\t', 'macdiff:', macd1.result.toFixed(digits));
 
 
 }
