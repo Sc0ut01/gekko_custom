@@ -80,7 +80,7 @@ method.log = function() {
 
   
   var digits = 8;
-  var macd = this.indicators.macd1;
+  var macd1 = this.indicators.macd1;
 
   var diff = macd1.diff;
   var signal = macd1.signal.result;
