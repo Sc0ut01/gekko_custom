@@ -128,7 +128,7 @@ method.check = function() {
       };
     this.trend.duration++;
     log.debug('In downtrend since', this.trend.duration, 'candle(s)');
-    if(this.trend.duration >= acd1_persistence)
+    if(this.trend.duration >= macd1_persistence)
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
