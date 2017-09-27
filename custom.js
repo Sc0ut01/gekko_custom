@@ -139,7 +139,7 @@ method.check = function() {
       this.advice();
 
   } else {
-    log.debug('we are currently not in an up or down trend', message);
+    //log.debug('we are currently not in an up or down trend', message);
     this.advice();
   }
 
