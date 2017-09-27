@@ -147,7 +147,7 @@ if(strat_sum = 10) {
       this.currentTrend = 'long';
       this.advice('long')    
 } else if (strat_sum = 20) {
-      this.currentTrend = 'short;
+      this.currentTrend = 'short';
       this.advice('short')
 }
  
