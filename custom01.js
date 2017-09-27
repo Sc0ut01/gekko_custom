@@ -114,12 +114,12 @@ method.check = function() {
     
   //var dema1_result = this.indicators.dema1;
   var dema1_diff = this.indicators.dema1.result;
-  var dema1_price = candle.close;
+  //var dema1_price = candle.close;
 
   //var message = '@ ' + price.toFixed(8) + ' (' + diff.toFixed(5) + ')';
 
   if(dema1_diff > dema1_up) {
-    log.debug('we are currently in uptrend', message);
+    //log.debug('we are currently in uptrend', message);
 
     if(this.currentTrend !== 'up') {
       this.currentTrend = 'up';
@@ -129,7 +129,7 @@ method.check = function() {
       this.advice();
 
   } else if(dema1_diff < dema1_down) {
-    log.debug('we are currently in a downtrend', message);
+    //log.debug('we are currently in a downtrend', message);
 
     if(this.currentTrend !== 'down') {
       this.currentTrend = 'down';
