@@ -1,14 +1,14 @@
-// helpers
+// helpers-------------------------------------------------------------------------------------------------
 var _ = require('lodash');
 var log = require('../core/log.js');
 
 
-// configuration
+// configuration-------------------------------------------------------------------------------------------
 var config = require('../core/util.js').getConfig();
 // let's create our own method
 var method = {};
 
-// prepare everything our method needs
+// prepare everything our method needs---------------------------------------------------------------------
 method.init = function() {
   
   this.name = 'MACD_DEMA_RSI_CCI';
@@ -41,7 +41,7 @@ method.init = function() {
   //this.lastLongPrice = 0;
 }
 
-// what happens on every new candle?
+// what happens on every new candle?----------------------------------------------------------------------------
 method.update = function(candle) {
   // nothing!  
 }
@@ -51,6 +51,7 @@ method.log = function() {
 
 }
 
+//check----------------------------------------------------------------------------------------------------------
 method.check = function() {
   
   var macd1_down = -0.025;
@@ -142,14 +143,25 @@ method.check = function() {
     this.advice();
   }
 
-    
-if(strat_sum = 10) {
+  //odlocitev-------------------------------------------------------
+
+
+  if(this.currentTrend === 'long') {
+
+    if(strat_sum = 10) {
       this.currentTrend = 'long';
-      this.advice('long')    
-} else if (strat_sum = 20) {
+      this.advice('short')
+    }
+
+  } else if(this.currentTrend === 'short') {
+
+    if(strat_sum = 20) {
       this.currentTrend = 'short';
       this.advice('short')
-}
+    }
+
+  }  
+ 
  
 }
 
