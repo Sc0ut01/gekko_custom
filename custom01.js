@@ -1,35 +1,7 @@
 // helpers
 var _ = require('lodash');
 var log = require('../core/log.js');
-//var globals = require('globals');
 
-//values
-  //macd1
-//var macd1_short = 10;
-//var macd1_long = 21;
-//var macd1_signal = 9;
-//var macd1_down = -0.025;
-//var macd1_up = 0.025;
-//var macd1_persistence = 1;
-
-  //dema1
-//global.dema1_short = 10;
-//global.dema1_long = 28;
-//global.dema1_down = -0.025;
-//global.dema1_up = 0.025;
-
-  //RSI
-//global.rsi1_interval = 10;
-//global.rsi1_low = 30;
-//global.rsi1_high = 70;
-//global.rsi1_persistence = 1;
-
-  //cci
-//global.cci1_constant = 0.015;
-//global.cci1_history = 90;
-//global.cci1_up = 120;
-//global.cci1_down = -30;
-//global.cci1_persistance = 1;
 
 // configuration
 var config = require('../core/util.js').getConfig();
@@ -52,8 +24,8 @@ method.init = function() {
   var macd1_parameters = {short: 10, long: 21, signal: 9};
   this.addIndicator('macd1', 'MACD', macd1_parameters);
   
-  //var dema1_parameters = {short: global.dema1_short, long: global.dema1_short, down: global.dema1_down, up: global.dema1_up};
-  //this.addIndicator('dema1', 'DEMA', dema1_parameters);
+  var dema1_parameters = {short: 10, long: 21};
+  this.addIndicator('dema1', 'DEMA', dema1_parameters);
   
   //var rsi1_parameters = {interval: global.rs1_interval, low: global.rs1_low, high: global.rs1_high, persistence: global.rs1_persistence};
   //this.addIndicator('rsi1', 'RSI', rsi1_parameters);
@@ -77,27 +49,20 @@ method.update = function(candle) {
 // for debugging purposes: log the last calculated
 method.log = function() {
 
-  
-  //var digits = 8;
-  //var macd1 = this.indicators.macd1;
-
-  //var diff = macd1.diff;
-  //var signal = macd1.signal.result;
-
-  //log.debug('calculated MACD properties for candle:');
-  //log.debug('\t', 'short:', macd1.short.result.toFixed(digits));
-  //log.debug('\t', 'long:', macd1.long.result.toFixed(digits));
-  //log.debug('\t', 'macd:', diff.toFixed(digits));
-  //log.debug('\t', 'signal:', signal.toFixed(digits));
-  //log.debug('\t', 'macdiff:', macd1.result.toFixed(digits));
-
-
 }
 
 method.check = function() {
+  
   var macd1_down = -0.025;
   var macd1_up = 0.025;
   var macd1_persistence = 1;
+  
+  var dema1_down = -0.25;
+  var dema1_up = 0.25;
+  
+  var strat_sum = 0;
+  
+  //macd1-----------------------------------------------------------
   
   var macd1_diff = this.indicators.macd1.result; 
   if(macd1_diff > macd1_up) {
@@ -114,7 +79,8 @@ method.check = function() {
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
-      this.advice('long');
+      strat_sum = strat_sum + 2;
+      //this.advice('long');
       } else
       this.advice(); 
  
@@ -132,17 +98,59 @@ method.check = function() {
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
-      this.advice('short');
+      strat_sum =strat_sum + 4;
+      //this.advice('short');
     } else
       this.advice();
 
   } else {
 
     log.debug('In no trend');
+    
+  }
   
-  
-  
- }
+  //dema1----------------------------------------------------------------------------  
+    
+  //var dema1_result = this.indicators.dema1;
+  var dema1_diff = this.indicators.dema1.result;
+  var dema1_price = candle.close;
+
+  //var message = '@ ' + price.toFixed(8) + ' (' + diff.toFixed(5) + ')';
+
+  if(dema1_diff > dema1_up) {
+    log.debug('we are currently in uptrend', message);
+
+    if(this.currentTrend !== 'up') {
+      this.currentTrend = 'up';
+      strat_sum =strat_sum + 8;
+      //this.advice('long');
+    } else
+      this.advice();
+
+  } else if(dema1_diff < dema1_down) {
+    log.debug('we are currently in a downtrend', message);
+
+    if(this.currentTrend !== 'down') {
+      this.currentTrend = 'down';
+      strat_sum =strat_sum + 16;
+      //this.advice('short');
+    } else
+      this.advice();
+
+  } else {
+    log.debug('we are currently not in an up or down trend', message);
+    this.advice();
+  }
+
+    
+if(strat_sum = 10) {
+      this.currentTrend = 'long';
+      this.advice('long')    
+} else if (strat_sum = 20) {
+      this.currentTrend = 'short;
+      this.advice('short')
+}
+ 
 }
 
 module.exports = method;
