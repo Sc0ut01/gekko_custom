@@ -40,7 +40,6 @@ var method = {};
 method.init = function() {
   
   this.name = 'MACD_DEMA_RSI_CCI';
-  this.currentTrend;
   this.trend = {
     direction: 'none',
     duration: 0,
@@ -67,7 +66,7 @@ method.init = function() {
   //this.addIndicator('ema144', 'EMA', 144);
   
   // initial value
-  this.lastLongPrice = 0;
+  //this.lastLongPrice = 0;
 }
 
 // what happens on every new candle?
@@ -79,18 +78,18 @@ method.update = function(candle) {
 method.log = function() {
 
   
-  var digits = 8;
-  var macd1 = this.indicators.macd1;
+  //var digits = 8;
+  //var macd1 = this.indicators.macd1;
 
-  var diff = macd1.diff;
-  var signal = macd1.signal.result;
+  //var diff = macd1.diff;
+  //var signal = macd1.signal.result;
 
-  log.debug('calculated MACD properties for candle:');
-  log.debug('\t', 'short:', macd1.short.result.toFixed(digits));
-  log.debug('\t', 'long:', macd1.long.result.toFixed(digits));
-  log.debug('\t', 'macd:', diff.toFixed(digits));
-  log.debug('\t', 'signal:', signal.toFixed(digits));
-  log.debug('\t', 'macdiff:', macd1.result.toFixed(digits));
+  //log.debug('calculated MACD properties for candle:');
+  //log.debug('\t', 'short:', macd1.short.result.toFixed(digits));
+  //log.debug('\t', 'long:', macd1.long.result.toFixed(digits));
+  //log.debug('\t', 'macd:', diff.toFixed(digits));
+  //log.debug('\t', 'signal:', signal.toFixed(digits));
+  //log.debug('\t', 'macdiff:', macd1.result.toFixed(digits));
 
 
 }
