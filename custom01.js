@@ -50,7 +50,7 @@ method.init = function() {
   this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
   //var macd1_parameters = {short: global.macd1_short, long: global.macd1_long, signal: global.macd1_signal, down: global.macd1_down, up: global.macd1_up, persistence: global.macd1_persistence};
-  this.addIndicator('macd1', 'MACD', this.settings, );
+  this.addIndicator('macd1', 'MACD', this.settings);
   
   //var dema1_parameters = {short: global.dema1_short, long: global.dema1_short, down: global.dema1_down, up: global.dema1_up};
   //this.addIndicator('dema1', 'DEMA', dema1_parameters);
