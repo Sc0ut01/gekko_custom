@@ -21,10 +21,10 @@ method.init = function() {
 
   this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
-  var macd1_parameters = {short: 10, long: 21, signal: 9};
+  var macd1_parameters = {short: 10, long: 28, signal: 9};
   this.addIndicator('macd1', 'MACD', macd1_parameters);
   
-  var dema1_parameters = {short: 10, long: 21};
+  var dema1_parameters = {short: 10, long: 28};
   this.addIndicator('dema1', 'DEMA', dema1_parameters);
   
   //var rsi1_parameters = {interval: global.rs1_interval, low: global.rs1_low, high: global.rs1_high, persistence: global.rs1_persistence};
@@ -54,12 +54,12 @@ method.log = function() {
 //check----------------------------------------------------------------------------------------------------------
 method.check = function() {
   
-  var macd1_down = -0.025;
-  var macd1_up = 0.025;
+  var macd1_down = -0.01;
+  var macd1_up = 0.01;
   var macd1_persistence = 1;
   
-  var dema1_down = -0.25;
-  var dema1_up = 0.25;
+  var dema1_down = -0.01;
+  var dema1_up = 0.01;
   
   var strat_sum = 0;
   
