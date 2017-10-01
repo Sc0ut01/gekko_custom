@@ -19,7 +19,8 @@ method.init = function() {
     adviced: false
   };
 
-  this.requiredHistory = config.tradingAdvisor.historySize;
+  this.requiredHistory = 1;
+  //this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
   var macd1_parameters = {short: 10, long: 28, signal: 9};
   this.addIndicator('macd1', 'MACD', macd1_parameters);
@@ -62,7 +63,8 @@ method.check = function() {
   var dema1_up = 0.01;
   
   var strat_sum = 0;
-  
+  var stevec = 0;
+
   //macd1-----------------------------------------------------------
   
   var macd1_diff = this.indicators.macd1.result; 
@@ -82,6 +84,7 @@ method.check = function() {
       this.trend.adviced = true;
       strat_sum = strat_sum + 2;
       //this.advice('long');
+      //log.debug(strat_sum,'long macd');
       } else
       this.advice(); 
  
@@ -101,6 +104,8 @@ method.check = function() {
       this.trend.adviced = true;
       strat_sum =strat_sum + 4;
       //this.advice('short');
+      //log.debug(strat_sum,'short macd');
+      log.debug(strat_sum,' ', stevec);
     } else
       this.advice();
 
@@ -125,6 +130,7 @@ method.check = function() {
       this.currentTrend = 'up';
       strat_sum =strat_sum + 8;
       //this.advice('long');
+      //log.debug(strat_sum,'long dema');
     } else
       this.advice();
 
@@ -135,6 +141,8 @@ method.check = function() {
       this.currentTrend = 'down';
       strat_sum =strat_sum + 16;
       //this.advice('short');
+      //log.debug(strat_sum,'short dema');
+      log.debug(strat_sum,' ', stevec);
     } else
       this.advice();
 
@@ -146,22 +154,20 @@ method.check = function() {
   //odlocitev-------------------------------------------------------
 
 
-  if(this.currentTrend === 'long') {
+  
 
     if(strat_sum = 10) {
-      this.currentTrend = 'long';
-      this.advice('short')
+      //this.currentTrend = 'long';
+      this.advice('long');
+      //log.debug('kupi',' ',strat_sum);
+    } else if(strat_sum = 20) {
+      //this.currentTrend = 'short';
+      this.advice('short');
+      //log.debug('prodaj',' ',strat_sum);
     }
 
-  } else if(this.currentTrend === 'short') {
-
-    if(strat_sum = 20) {
-      this.currentTrend = 'short';
-      this.advice('short')
-    }
-
-  }  
- 
+    
+ stevec = stevec+1;
  
 }
 
