@@ -22,10 +22,10 @@ method.init = function() {
   this.requiredHistory = 1;
   //this.requiredHistory = config.tradingAdvisor.historySize;
   // define the indicators we need
-  var macd1_parameters = {short: 10, long: 28, signal: 9};
+  var macd1_parameters = {short: 3, long: 6, signal: 9};
   this.addIndicator('macd1', 'MACD', macd1_parameters);
   
-  var dema1_parameters = {short: 10, long: 28};
+  var dema1_parameters = {short: 3, long: 6};
   this.addIndicator('dema1', 'DEMA', dema1_parameters);
   
   //var rsi1_parameters = {interval: global.rs1_interval, low: global.rs1_low, high: global.rs1_high, persistence: global.rs1_persistence};
@@ -55,15 +55,15 @@ method.log = function() {
 //check----------------------------------------------------------------------------------------------------------
 method.check = function() {
   
-  var macd1_down = -0.01;
-  var macd1_up = 0.01;
+  var macd1_down = -0.001;
+  var macd1_up = 0.001;
   var macd1_persistence = 1;
   
-  var dema1_down = -0.01;
-  var dema1_up = 0.01;
+  var dema1_down = -0.001;
+  var dema1_up = 0.001;
   
-  var strat_sum = 0;
-  var stevec = 0;
+  var strat_sum_macd1 = 0;
+  var strat_sum_dema1 = 0;
 
   //macd1-----------------------------------------------------------
   
@@ -82,7 +82,7 @@ method.check = function() {
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
-      strat_sum = strat_sum + 2;
+      strat_sum_macd1 = strat_sum_macd1 + 2;
       //this.advice('long');
       //log.debug(strat_sum,'long macd');
       } else
@@ -102,10 +102,10 @@ method.check = function() {
       this.trend.persisted = true;
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
-      strat_sum =strat_sum + 4;
+      strat_sum_macd1 =strat_sum_macd1 + 4;
       //this.advice('short');
       //log.debug(strat_sum,'short macd');
-      log.debug(strat_sum,' ', stevec);
+      //log.debug(strat_sum,' ', stevec);
     } else
       this.advice();
 
@@ -128,7 +128,7 @@ method.check = function() {
 
     if(this.currentTrend !== 'up') {
       this.currentTrend = 'up';
-      strat_sum =strat_sum + 8;
+      strat_sum_dema1 =strat_sum_dema1 + 8;
       //this.advice('long');
       //log.debug(strat_sum,'long dema');
     } else
@@ -139,10 +139,10 @@ method.check = function() {
 
     if(this.currentTrend !== 'down') {
       this.currentTrend = 'down';
-      strat_sum =strat_sum + 16;
+      strat_sum_dema1 =strat_sum_dema1 + 16;
       //this.advice('short');
       //log.debug(strat_sum,'short dema');
-      log.debug(strat_sum,' ', stevec);
+      //log.debug(strat_sum,' ', stevec);
     } else
       this.advice();
 
@@ -156,19 +156,40 @@ method.check = function() {
 
   
 
-    if(strat_sum = 10) {
+    //if(strat_sum = 10) {
       //this.currentTrend = 'long';
-      this.advice('long');
+      //this.advice('long');
       //log.debug('kupi',' ',strat_sum);
-    } else if(strat_sum = 20) {
+    //} else if(strat_sum = 20) {
       //this.currentTrend = 'short';
-      this.advice('short');
+      //this.advice('short');
       //log.debug('prodaj',' ',strat_sum);
+    //}
+
+  //if (strat_sum_macd1 == 2) {
+ 
+    if (strat_sum_macd1 == 2 || strat_sum_dema1 == 8) {
+
+      this.advice('long');
+      log.debug(strat_sum_macd1,'long',strat_sum_dema1);
+ 
     }
 
+  //}
+
+
+  if (strat_sum_macd1 == 4 || strat_sum_dema1 == 16) {
     
- stevec = stevec+1;
- 
+       //if (strat_sum_dema1 == 16) {
+   
+         this.advice('short');
+         log.debug(strat_sum_macd1,'short',strat_sum_dema1);
+    
+       }
+   
+     //}
+
+
 }
 
 module.exports = method;
