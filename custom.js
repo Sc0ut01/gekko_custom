@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var log = require('../core/log.js');
 
+var RSI = require('./indicators/RSI.js');
 
 // configuration-------------------------------------------------------------------------------------------
 var config = require('../core/util.js').getConfig();
@@ -25,9 +26,11 @@ method.init = function() {
   var macd1_parameters = {short: 3, long: 6, signal: 9};
   this.addIndicator('macd1', 'MACD', macd1_parameters);
   
-  var dema1_parameters = {short: 3, long: 6};
+  var dema1_parameters = {short: 3, long:6};
   this.addIndicator('dema1', 'DEMA', dema1_parameters);
   
+  var rsi1_parameters = {interval: 14}
+  this.addIndicator('rsi', 'RSI', rsi1_parameters);
   //var rsi1_parameters = {interval: global.rs1_interval, low: global.rs1_low, high: global.rs1_high, persistence: global.rs1_persistence};
   //this.addIndicator('rsi1', 'RSI', rsi1_parameters);
   
@@ -62,8 +65,14 @@ method.check = function() {
   var dema1_down = -0.001;
   var dema1_up = 0.001;
   
+  var rsi1_low = 30;
+  var rsi1_high = 70;
+  var rsi1_persistence = 1;
+
   var strat_sum_macd1 = 0;
   var strat_sum_dema1 = 0;
+  var strat_sum_rsi1 = 0;
+
 
   //macd1-----------------------------------------------------------
   
@@ -151,45 +160,82 @@ method.check = function() {
     this.advice();
   }
 
+  //rsi1------------------------------------------------------------
+
+  var rsi = this.indicators.rsi;
+  var rsiVal = rsi.rsi;
+
+  if(rsiVal > rsi1_high) {
+    
+        // new trend detected
+        if(this.trend.direction !== 'high')
+          this.trend = {
+            duration: 0,
+            persisted: false,
+            direction: 'high',
+            adviced: false
+          };
+    
+        this.trend.duration++;
+    
+        if(this.trend.duration >= rsi1_persistence)
+          this.trend.persisted = true;
+    
+        if(this.trend.persisted && !this.trend.adviced) {
+          this.trend.adviced = true;
+          //this.advice('short');
+          strat_sum_rsi1 = strat_sum_rsi1 + 64;
+        } else
+          this.advice();
+    
+      } else if(rsiVal < rsi1_low) {
+    
+        // new trend detected
+        if(this.trend.direction !== 'low')
+          this.trend = {
+            duration: 0,
+            persisted: false,
+            direction: 'low',
+            adviced: false
+          };
+    
+        this.trend.duration++;
+    
+        if(this.trend.duration >= rsi1_persistence)
+          this.trend.persisted = true;
+    
+        if(this.trend.persisted && !this.trend.adviced) {
+          this.trend.adviced = true;
+          //this.advice('long');
+          strat_sum_rsi1 = strat_sum_rsi1 + 32;
+        } else
+          this.advice();
+    
+      } else {
+    
+        //log.debug('In no trend');
+    
+        this.advice();
+      }
+    
+    
+
+
   //odlocitev-------------------------------------------------------
 
-
-  
-
-    //if(strat_sum = 10) {
-      //this.currentTrend = 'long';
-      //this.advice('long');
-      //log.debug('kupi',' ',strat_sum);
-    //} else if(strat_sum = 20) {
-      //this.currentTrend = 'short';
-      //this.advice('short');
-      //log.debug('prodaj',' ',strat_sum);
-    //}
-
-  //if (strat_sum_macd1 == 2) {
  
-    if (strat_sum_macd1 == 2 || strat_sum_dema1 == 8) {
+    if (strat_sum_macd1 == 2 || strat_sum_dema1 == 8 || strat_sum_rsi1 == 32) {
 
       this.advice('long');
       log.debug(strat_sum_macd1,'long',strat_sum_dema1);
  
-    }
-
-  //}
-
-
-  if (strat_sum_macd1 == 4 || strat_sum_dema1 == 16) {
-    
-       //if (strat_sum_dema1 == 16) {
+    } else if (strat_sum_macd1 == 4 || strat_sum_dema1 == 16 || strat_sum_rsi1 == 64) {
    
          this.advice('short');
          log.debug(strat_sum_macd1,'short',strat_sum_dema1);
     
        }
    
-     //}
-
-
 }
 
 module.exports = method;
