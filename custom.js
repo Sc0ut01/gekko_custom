@@ -4,6 +4,8 @@ var log = require('../core/log.js');
 
 var RSI = require('./indicators/RSI.js');
 
+var fs = require('fs');
+
 // configuration-------------------------------------------------------------------------------------------
 var config = require('../core/util.js').getConfig();
 // let's create our own method
@@ -47,7 +49,15 @@ method.init = function() {
 
 // what happens on every new candle?----------------------------------------------------------------------------
 method.update = function(candle) {
-  // nothing!  
+  // nothing! 
+  var msgpath = "C:\\Users\\T\\AppData\\Local\\lxss\\home\\T\\gekko\\history\\message.txt"
+  
+  fs.writeFile(msgpath, "Hello", function(err){
+  if (err) throw err;
+  console.log("success");
+
+  });
+
 }
 
 // for debugging purposes: log the last calculated
