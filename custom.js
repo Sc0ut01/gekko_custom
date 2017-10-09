@@ -8,7 +8,7 @@ var method = {};
 // prepare everything our method needs
 method.init = function() {
   this.currentTrend;
-  this.requiredHistory = this.tradingAdvisor.historySize;
+  //this.requiredHistory = 2;
 
   this.age = 0;
   this.trend = {
@@ -17,40 +17,36 @@ method.init = function() {
     persisted: false,
     adviced: false
   };
-  this.historySize = this.tradingAdvisor.historySize;
+  //this.historySize = 2;
   this.ppoadv = 'none';
-  this.uplevel = this.settings.thresholds.up;
-  this.downlevel = this.settings.thresholds.down;
-  this.persisted = this.settings.thresholds.persistence;
+  //this.uplevel = 100;
+  //this.downlevel = 100;
+  //this.persisted = 0;
+var cci1_parameters = {constant: 0.015, history: 0, up: 100, down: -100, persistenc: 1}
+global.stevec = 0;
+global.cena0 = 0;
+global.cena1 = 0;
+global.kupil = 0;
+global.stevec_candle = 0;
 
   // log.debug("CCI started with:\nup:\t", this.uplevel, "\ndown:\t", this.downlevel, "\npersistence:\t", this.persisted);
   // define the indicators we need
-  this.addIndicator('cci', 'CCI', this.settings);
+  this.addIndicator('cci', 'CCI', cci1_parameters);
 }
 
 // what happens on every new candle?
 method.update = function(candle) {
+
+
+
 }
 
 // for debugging purposes: log the last calculated
 // EMAs and diff.
 method.log = function() {
-    var cci = this.indicators.cci;
-    if (typeof(cci.result) == 'boolean') {
-        log.debug('Insufficient data available. Age: ', cci.size, ' of ', cci.maxSize);
-        log.debug('ind: ', cci.TP.result, ' ', cci.TP.age, ' ', cci.TP.depth);
-        return;
-    }
+  
 
-    log.debug('calculated CCI properties for candle:');
-    log.debug('\t', 'Price:\t\t\t', this.lastPrice);
-    log.debug('\t', 'CCI tp:\t', cci.tp.toFixed(8));
-    log.debug('\t', 'CCI tp/n:\t', cci.TP.result.toFixed(8));
-    log.debug('\t', 'CCI md:\t', cci.mean.toFixed(8));
-    if (typeof(cci.result) == 'boolean' )
-        log.debug('\t In sufficient data available.');
-    else
-        log.debug('\t', 'CCI:\t', cci.result.toFixed(2));
+
 }
 
 /*
@@ -58,69 +54,61 @@ method.log = function() {
  */
 method.check = function(candle) {
 
-  var price = candle.close;
+ // var price = candle.close;
 
-    this.age++;
-    var cci = this.indicators.cci;
+//log.debug(candle.close)
 
-    if (typeof(cci.result) == 'number') {
+stevec_candle = stevec_candle + 1;
+log.debug(stevec_candle,stevec);  
 
-        // overbought?
-        if (cci.result >= this.uplevel && (this.trend.persisted || this.persisted == 0) && !this.trend.adviced && this.trend.direction == 'overbought' ) {
-            this.trend.adviced = true;
-            this.trend.duration++;
-            this.advice('short');
-        } else if (cci.result >= this.uplevel && this.trend.direction != 'overbought') {
-            this.trend.duration = 1;
-            this.trend.direction = 'overbought';
-            this.trend.persisted = false;
-            this.trend.adviced = false;
-            if (this.persisted == 0) {
-                this.trend.adviced = true;
-                this.advice('short');
-            }
-        } else if (cci.result >= this.uplevel) {
-            this.trend.duration++;
-            if (this.trend.duration >= this.persisted) {
-                this.trend.persisted = true;
-            }
-        } else if (cci.result <= this.downlevel && (this.trend.persisted || this.persisted == 0) && !this.trend.adviced && this.trend.direction == 'oversold') {
-            this.trend.adviced = true;
-            this.trend.duration++;
-            this.advice('long');
-        } else if (cci.result <= this.downlevel && this.trend.direction != 'oversold') {
-            this.trend.duration = 1;
-            this.trend.direction = 'oversold';
-            this.trend.persisted = false;
-            this.trend.adviced = false;
-            if (this.persisted == 0) {
-                this.trend.adviced = true;
-                this.advice('long');
-            }
-        } else if (cci.result <= this.downlevel) {
-            this.trend.duration++;
-            if (this.trend.duration >= this.persisted) {
-                this.trend.persisted = true;
-            }
-        } else {
-            if( this.trend.direction != 'nodirection') {
-                this.trend = {
-                    direction: 'nodirection',
-                    duration: 0,
-                    persisted: false,
-                    adviced: false
-                };
-            } else {
-                this.trend.duration++;
-            }
-            this.advice();
-        }
+var ze_naredil = 0;
 
-    } else {
-        this.advice();
+  if (stevec == 0 && ze_naredil == 0) {
+
+    cena0 = candle.close;
+    log.debug(stevec,' ',cena0,' ',cena1);
+    stevec = stevec + 1;
+    ze_naredil = 1;
+
+  } else if (stevec == 1 && ze_naredil == 0) {
+
+    cena1 = candle.close;
+
+    if (cena1 > cena0 && ze_naredil == 0) {
+
+        this.advice('long');
+        kupil = 1;
+        log.debug(stevec,' ',cena0,' ',cena1,'kupil');
+        cena0 = cena1;
+        stevec = stevec + 1;
+        ze_naredil = 1;
+
+    }else if (cena1 < cena0 && ze_naredil == 0) {
+
+        log.debug(stevec,' ',cena0,' ',cena1);
+        stevec = stevec + 1;
+        ze_naredil = 1;
+
     }
 
-    log.debug("Trend: ", this.trend.direction, " for ", this.trend.duration);
+  } else if (stevec > 1 && kupil == 1 && ze_naredil == 0) {
+
+    cena1 = candle.close;
+
+    if (cena1 < cena0) {
+
+        this.advice('short');
+        kupil = 0;
+        log.debug(stevec,' ',cena0,' ',cena1,'prodal');
+        stevec = 0;
+        ze_naredil = 1;
+
+    }
+
+
+ }
+    
+
 }
 
 module.exports = method;
