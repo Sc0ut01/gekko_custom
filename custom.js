@@ -28,6 +28,7 @@ global.cena0 = 0;
 global.cena1 = 0;
 global.kupil = 0;
 global.stevec_candle = 0;
+global.ze_naredil = 0;
 
   // log.debug("CCI started with:\nup:\t", this.uplevel, "\ndown:\t", this.downlevel, "\npersistence:\t", this.persisted);
   // define the indicators we need
@@ -58,19 +59,21 @@ method.check = function(candle) {
 
 //log.debug(candle.close)
 
-stevec_candle = stevec_candle + 1;
-log.debug(stevec_candle,stevec);  
+//log.debug(stevec_candle,'candle_stevec',stevec,'stevec');  
+//stevec_candle = stevec_candle + 1;
 
-var ze_naredil = 0;
+ze_naredil = 0;
 
   if (stevec == 0 && ze_naredil == 0) {
 
     cena0 = candle.close;
-    log.debug(stevec,' ',cena0,' ',cena1);
+    log.debug(stevec,'stevec',cena0,' ',cena1);
     stevec = stevec + 1;
     ze_naredil = 1;
 
-  } else if (stevec == 1 && ze_naredil == 0) {
+  } 
+  
+  if (stevec == 1 && ze_naredil == 0) {
 
     cena1 = candle.close;
 
@@ -78,20 +81,16 @@ var ze_naredil = 0;
 
         this.advice('long');
         kupil = 1;
-        log.debug(stevec,' ',cena0,' ',cena1,'kupil');
+        log.debug(stevec,'stevec',cena0,' ',cena1,'kupil');
         cena0 = cena1;
-        stevec = stevec + 1;
-        ze_naredil = 1;
-
-    }else if (cena1 < cena0 && ze_naredil == 0) {
-
-        log.debug(stevec,' ',cena0,' ',cena1);
         stevec = stevec + 1;
         ze_naredil = 1;
 
     }
 
-  } else if (stevec > 1 && kupil == 1 && ze_naredil == 0) {
+  } 
+  
+  if (stevec > 1 && kupil == 1 && ze_naredil == 0) {
 
     cena1 = candle.close;
 
@@ -99,15 +98,35 @@ var ze_naredil = 0;
 
         this.advice('short');
         kupil = 0;
-        log.debug(stevec,' ',cena0,' ',cena1,'prodal');
-        stevec = 0;
+        log.debug(stevec,'stevec',cena0,' ',cena1,'prodal');
+        stevec = stevec + 1;
         ze_naredil = 1;
 
     }
 
+    cena0 = cena1;
 
  }
     
+ if (stevec > 1 && kupil == 0 && ze_naredil == 0) {
+  
+      cena1 = candle.close;
+  
+      if (cena1 > cena0*1.2) {
+  
+          this.advice('long');
+          kupil = 1;
+          log.debug(stevec,'stevec',cena0,' ',cena1,'kupil');
+          stevec = stevec + 1;
+          ze_naredil = 1;
+  
+      }
+  
+      cena0 = cena1;
+  
+   }
+
+
 
 }
 
