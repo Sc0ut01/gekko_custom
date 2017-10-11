@@ -1,6 +1,9 @@
 // helpers
 var _ = require('lodash');
 var log = require('../core/log.js');
+var RSI = require('./indicators/RSI.js');
+
+var fs = require('fs');
 
 // let's create our own method
 var method = {};
@@ -19,30 +22,31 @@ method.init = function() {
   };
   //this.historySize = 2;
   this.ppoadv = 'none';
-  //this.uplevel = 100;
-  //this.downlevel = 100;
-  //this.persisted = 0;
-var cci1_parameters = {constant: 0.015, history: 0, up: 100, down: -100, persistence: 0}
-var rsi1_parameters = {interval: 14, low: 30, high: 70, persistence: 0}
-var StochRSI1_parameters = {interval: 3, low: 20, high: 80, persistence: 0}
-global.stevec = 0;
-global.cena0 = 0;
-global.cena1 = 0;
-global.kupil = 0;
-global.stevec_candle = 0;
-global.ze_naredil = 0;
+  
+  var cci1_parameters = {constant: 0.015, history: 0, up: 100, down: -100, persistence: 0}
+  var rsi1_parameters = {interval: 14, low: 30, high: 70, persistence: 0}
+  var StochRSI1_parameters = {interval: 3, low: 20, high: 80, persistence: 0}
+  global.stevec = 0;
+  global.cena0 = 0;
+  global.cena1 = 0;
+  global.kupil = 0;
+  global.stevec_candle = 0;
+  global.ze_naredil = 0;
 
   // log.debug("CCI started with:\nup:\t", this.uplevel, "\ndown:\t", this.downlevel, "\npersistence:\t", this.persisted);
   // define the indicators we need
+  
   this.addIndicator('cci', 'CCI', cci1_parameters);
   this.addIndicator('rsi', 'RSI', rsi1_parameters);
-  this.addIndicator('StochRSI', 'StochRSI', StochRSI1_parameters);
+  //this.addIndicator('StochRSI', 'StochRSI', StochRSI1_parameters);
+  
 }
 
 // what happens on every new candle?
 method.update = function(candle) {
 
-
+  
+  
 
 }
 
@@ -65,9 +69,20 @@ method.check = function(candle) {
 
 var cci = this.indicators.cci;
 var rsi = this.indicators.rsi;
-var StochRSI = this.stochRSI;
+//var StochRSI = this.stochRSI;
+var rsiVal = rsi.rsi;
 
-log.debug(stevec_candle,'candle_stevec',cci, rsi, StochRSI);  
+//if (typeof(cci.result) == 'number') {
+var cciVal = cci.result.toFixed(2);
+//}
+
+if (stevec_candle == 30) {
+
+log.debug(stevec_candle,'candle_stevec',cciVal);  
+//log.debug(stevec_candle,'candle_stevec',cci, rsi, StochRSI);  
+
+}
+
 stevec_candle = stevec_candle + 1;
 
 
