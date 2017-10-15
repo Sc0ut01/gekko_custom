@@ -170,7 +170,13 @@ if (stevec_candle > 5) {
   //rsi_povprecje = (rsi_1 + rsi_2 + rsi_3 + rsi_4 + rsi_5)/5;
   rsi_povprecje = ((rsi_2 - rsi_1) + (rsi_3 - rsi_2) + (rsi_4 - rsi_3) + (rsi_5 - rsi_4))/4;
 
-  rsi_razmerje = (rsiVal - rsi_5) - rsi_povprecje;
+  if (rsi_povprecje == 0) {
+    
+    rsi_povprecje = 0.00000001;
+    
+  }
+
+  rsi_razmerje = (rsiVal - rsi_5)/rsi_povprecje;
 
   rsi_1 = rsi_2;
   rsi_2 = rsi_3;
@@ -181,25 +187,53 @@ if (stevec_candle > 5) {
   //srsi_povprecje = (srsi_1 + srsi_2 + srsi_3 + srsi_4 + srsi_5)/5;
   srsi_povprecje = ((srsi_2 - srsi_1) + (srsi_3 - srsi_2) + (srsi_4 - srsi_3) + (srsi_5 - srsi_4))/4;
   
-  srsi_razmerje = (StochRSIVal - srsi_5) - srsi_povprecje;
-  
+  if (srsi_povprecje == 0) {
+
+    srsi_povprecje = 0.00000001;
+
+  }
+
+  srsi_razmerje = (StochRSIVal - srsi_5)/srsi_povprecje;
+
   srsi_1 = srsi_2;
   srsi_2 = srsi_3;
   srsi_3 = srsi_4;
   srsi_4 = srsi_5;
   srsi_5 = StochRSIVal;
 
+  //if (stevec_candle < 40) {
+
+  //log.debug(rsi_razmerje);
+  
+
+  //}
+
 }
 
-//log.debug('rsi_povp',rsi_povprecje,'srsi_povp',srsi_povprecje);
-log.debug(srsi_povprecje);
+var zrsi_meja = 3;
+var srsi_meja = -4;
+var pada_rsi_razm = -0.7;
+var pada_srsi_razm = -0.8;
+var ravno_rsi_razm = 10;
+var ravno_srsi_razm = 12;
 
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < -4 && srsi_povprecje < -10) {
+var zsrsi_meja = 7;
+var ssrsi_meja = -8;
+var raste_rsi_razm = 1.1;
+var raste_srsi_razm = 1.1;
+
+
+
+//pada
+//log.debug('rsi_povp',rsi_povprecje,'srsi_povp',srsi_povprecje);
+//log.debug(srsi_povprecje);
+
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < srsi_meja && srsi_povprecje < ssrsi_meja) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > 0.5 && srsi_razmerje > 0.5) {
-
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < pada_rsi_razm && srsi_razmerje < pada_srsi_razm) {
+log.debug(stevec_candle, 'pada');
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -210,12 +244,13 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < -4 && srsi_povprecje < -1
 
 }
 
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > -4 && rsi_povprecje < 2 && srsi_povprecje > -10 && srsi_povprecje < 10) {
+//vodoravno pod nulo
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > srsi_meja && rsi_povprecje < 0 && srsi_povprecje > ssrsi_meja && srsi_povprecje < 0) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > 0.7 && srsi_razmerje > 0.7) {
-
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < (-1*ravno_rsi_razm) && srsi_razmerje < (-1*ravno_srsi_razm)) {
+      log.debug(stevec_candle,'pod',rsi_razmerje,srsi_razmerje);
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -226,12 +261,30 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > -4 && rsi_povprecje < 2 &
 
 }
 
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > 2 && srsi_povprecje > 10 ) {
+//vodoravno naad nulo
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > 0 && rsi_povprecje < zrsi_meja && srsi_povprecje > 0 && srsi_povprecje < zsrsi_meja) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > 0.3 && srsi_razmerje > 0.3) {
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > ravno_rsi_razm && srsi_razmerje > ravno_srsi_razm) {
+log.debug(stevec_candle,'nad',rsi_razmerje,srsi_razmerje);
+  this.advice('long');
+  kupil = 1;
+  cena_nakup = candle.close;
+  ze_naredil = 1;
+  //log.debug('2','rsi_razm',rsi_razmerje, 'srsi_razm',srsi_razmerje,'rsi_povp',rsi_povprecje,'srsi_povp',srsi_povprecje);
+ 
+  }
 
+}
+
+//narasca
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > zrsi_meja && srsi_povprecje > zsrsi_meja ) {
+  //log.debug(stevec_candle,'trend rasti');
+  //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
+
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > raste_rsi_razm && srsi_razmerje > raste_srsi_razm) {
+log.debug(stevec_candle,'raste');
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -248,7 +301,7 @@ if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1) {
   
   if (StochRSIVal < StochRSIVal0 || rsiVal < rsiVal0 || cciVal < cciVal0 || StochRSIVal == StochRSIVal0 || rsiVal == rsiVal0 || cciVal == cciVal0) {
 
-    if (cena_zdaj > cena_nakup*1.05) {
+    //if (cena_zdaj > cena_nakup*1.05) {
 
   this.advice('short');
   kupil = 0;
@@ -257,7 +310,7 @@ if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1) {
   ze_naredil = 1;
   stprodaj = stprodaj + 1;
 
-    }
+    //}
 
  }
 
