@@ -228,11 +228,11 @@ var raste_srsi_razm = 1.1;
 //log.debug('rsi_povp',rsi_povprecje,'srsi_povp',srsi_povprecje);
 //log.debug(srsi_povprecje);
 
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < srsi_meja && srsi_povprecje < ssrsi_meja) {
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < srsi_meja) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < pada_rsi_razm && srsi_razmerje < pada_srsi_razm) {
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < pada_rsi_razm) {
 log.debug(stevec_candle, 'pada');
   this.advice('long');
   kupil = 1;
@@ -245,11 +245,11 @@ log.debug(stevec_candle, 'pada');
 }
 
 //vodoravno pod nulo
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > srsi_meja && rsi_povprecje < 0 && srsi_povprecje > ssrsi_meja && srsi_povprecje < 0) {
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > srsi_meja && rsi_povprecje < 0) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < (-1*ravno_rsi_razm) && srsi_razmerje < (-1*ravno_srsi_razm)) {
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje < (-1*ravno_rsi_razm)) {
       log.debug(stevec_candle,'pod',rsi_razmerje,srsi_razmerje);
   this.advice('long');
   kupil = 1;
@@ -262,11 +262,11 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > srsi_meja && rsi_povprecj
 }
 
 //vodoravno naad nulo
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > 0 && rsi_povprecje < zrsi_meja && srsi_povprecje > 0 && srsi_povprecje < zsrsi_meja) {
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > 0 && rsi_povprecje < zrsi_meja) {
   
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > ravno_rsi_razm && srsi_razmerje > ravno_srsi_razm) {
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > ravno_rsi_razm) {
 log.debug(stevec_candle,'nad',rsi_razmerje,srsi_razmerje);
   this.advice('long');
   kupil = 1;
@@ -279,11 +279,11 @@ log.debug(stevec_candle,'nad',rsi_razmerje,srsi_razmerje);
 }
 
 //narasca
-if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > zrsi_meja && srsi_povprecje > zsrsi_meja ) {
+if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > zrsi_meja) {
   //log.debug(stevec_candle,'trend rasti');
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
-    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > raste_rsi_razm && srsi_razmerje > raste_srsi_razm) {
+    if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > raste_rsi_razm) {
 log.debug(stevec_candle,'raste');
   this.advice('long');
   kupil = 1;
@@ -297,7 +297,7 @@ log.debug(stevec_candle,'raste');
 
 cena_zdaj = candle.close;
 
-if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1) {
+if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1 && rsival < 70) {
   
   if (StochRSIVal < StochRSIVal0 || rsiVal < rsiVal0 || cciVal < cciVal0 || StochRSIVal == StochRSIVal0 || rsiVal == rsiVal0 || cciVal == cciVal0) {
 
@@ -336,4 +336,3 @@ stevec_candle = stevec_candle + 1;
 }
 
 module.exports = method;
-0
