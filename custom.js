@@ -106,7 +106,8 @@ var cci = this.indicators.cci;
 var rsi = this.indicators.rsi;
 
 var StochRSIVal = this.stochRSI;
-var rsiVal = rsi.rsi;
+//var rsiVal = rsi.rsi;
+var rsiVal = candle.close;
 var cciVal = cci.result;
 
 //if (stevec_candle == 190) {
@@ -178,6 +179,8 @@ if (stevec_candle > 5) {
 
   rsi_razmerje = (rsiVal - rsi_5)/rsi_povprecje;
 
+  log.debug(stevec_candle,rsi_povprecje,rsiVal - rsi_5,rsi_razmerje);
+
   rsi_1 = rsi_2;
   rsi_2 = rsi_3;
   rsi_3 = rsi_4;
@@ -233,7 +236,7 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje < srsi_meja) {
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
     if (ze_naredil == 0 && rsi_razmerje < pada_rsi_razm) {
-    log.debug(stevec_candle,'pada',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
+    //log.debug(stevec_candle,'pada',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -250,7 +253,7 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > srsi_meja && rsi_povprecj
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
     if (ze_naredil == 0 && rsi_razmerje < (-1*ravno_rsi_razm)) {
-      log.debug(stevec_candle,'pod',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
+      //log.debug(stevec_candle,'pod',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -267,7 +270,7 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > 0 && rsi_povprecje < zrsi
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
     if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > ravno_rsi_razm) {
-    log.debug(stevec_candle,'nad',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
+    //log.debug(stevec_candle,'nad',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
@@ -284,7 +287,7 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > zrsi_meja) {
   //if (ze_naredil == 0 && StochRSIVal > StochRSIVal0 && rsiVal > rsiVal0 && cciVal > cciVal0) {
 
     if (ze_naredil == 0 && cciVal > cciVal0 && rsi_razmerje > raste_rsi_razm) {
-    log.debug(stevec_candle,'raste',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
+    //log.debug(stevec_candle,'raste',rsi_povprecje,rsiVal - rsi_4,rsi_razmerje);
   this.advice('long');
   kupil = 1;
   cena_nakup = candle.close;
