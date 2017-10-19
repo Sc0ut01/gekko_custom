@@ -300,9 +300,9 @@ if (stevec_candle > 0 && kupil == 0 && rsi_povprecje > zrsi_meja) {
 
 cena_zdaj = candle.close;
 
-if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1 && rsiVal < 70) {
+if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1) {
   
-  if (rsiVal < rsiVal0 || cciVal < cciVal0 || rsiVal == rsiVal0 || cciVal == cciVal0) {
+  if (StochRSIVal < StochRSIVal0 && cciVal < cciVal0) {
 
     //if (cena_zdaj > cena_nakup*1.05) {
 
@@ -319,7 +319,26 @@ if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1 && rsiVal < 70) {
 
 }
 
-if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1 && cena_zdaj > (cena_nakup*1.1)) {
+if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1) {
+  
+  if (StochRSIVal == StochRSIVal0 || cciVal == cciVal0) {
+
+    //if (cena_zdaj > cena_nakup*1.05) {
+
+  this.advice('short');
+  kupil = 0;
+  //log.debug('buy',cena_nakup,'sell',cena_zdaj);
+
+  ze_naredil = 1;
+  stprodaj = stprodaj + 1;
+
+    //}
+
+ }
+
+}
+
+if (stevec_candle > 0 && ze_naredil == 0 && kupil ==1 && cena_zdaj > (cena_nakup*1.02)) {
 
   this.advice('short');
   kupil = 0;
