@@ -109,7 +109,7 @@ var rsi = this.indicators.rsi;
 
 var StochRSIVal = this.stochRSI;
 //var rsiVal = rsi.rsi;
-var rsiVal = candle.close;
+var rsiVal = candle.low;
 var cciVal = cci.result;
 
 //if (stevec_candle == 190) {
